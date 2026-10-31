@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6654d9">
+<title>درس — برافوتِن</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🌟%3C/text%3E%3C/svg%3E">
+<style>
+:root{--ink:#192744;--muted:#65738a;--purple:#6654d9;--pale:#eeeaff;--teal:#20a78e;--yellow:#ffca55;--pink:#ff7d9d;--blue:#4aa8ff;--bg:#fbf9ff;--line:#eceaf4;--good:#15a06a;--bad:#e8590c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:radial-gradient(ellipse at 0 0,#eeeaff 0,transparent 30%),radial-gradient(ellipse at 100% 25%,#e4fbf4 0,transparent 28%),radial-gradient(ellipse at 50% 100%,#fff3d6 0,transparent 35%),var(--bg);font-family:Tahoma,Arial,sans-serif;line-height:1.7;min-height:100vh;overflow-x:hidden}
+button{font:inherit;cursor:pointer;color:inherit}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(760px,94%);margin:auto}
+header{position:sticky;top:0;z-index:30;background:#ffffffee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line);box-shadow:0 5px 22px #1927440b}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}
+.back{background:var(--pale);color:#5140bb;padding:8px 13px;border-radius:12px;font-weight:bold;white-space:nowrap}
+.hud{display:flex;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff6dc;border:1px solid #f6e3ab;border-radius:99px;padding:5px 12px;font-weight:900;color:#7a5600}
+.mute{border:1px solid var(--line);background:#fff;border-radius:99px;width:40px;height:40px;font-size:1.15rem}
+main{padding:16px 0 60px}
+.crumb{color:var(--muted);font-size:.9rem;margin:2px 4px 0}
+h1{font-size:clamp(1.45rem,5vw,2rem);line-height:1.35;margin:4px 4px 6px}
+.goal{margin:0 4px 12px;color:var(--muted)}
+.dots{display:flex;gap:6px;justify-content:center;margin:6px 0 12px}
+.dot{width:34px;height:9px;border-radius:9px;background:#e5e1f5;transition:.3s}
+.dot.on{background:var(--teal);width:48px}
+.dot.done{background:var(--purple)}
+.card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:18px;box-shadow:0 14px 36px #283a680f;position:relative;overflow:hidden}
+.enter{animation:slideIn .45s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes slideIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+.mascot-row{display:flex;gap:12px;align-items:flex-start}
+.mascot{font-size:3.4rem;line-height:1;animation:bob 3s ease-in-out infinite;flex:0 0 auto;filter:drop-shadow(0 5px 0 #0001)}
+@keyframes bob{50%{transform:translateY(-7px) rotate(3deg)}}
+.bubble{position:relative;background:linear-gradient(135deg,#fff8e4,#fffdf6);border:2px solid #f7e2a6;border-radius:20px;padding:12px 14px;flex:1;font-size:1.05rem}
+.bubble h2{margin:0 0 4px;font-size:1.2rem;color:var(--purple)}
+.bubble p{margin:0}
+.say{margin-top:8px;border:0;background:var(--purple);color:#fff;padding:8px 14px;border-radius:13px;font-weight:bold;box-shadow:0 4px 0 #4b3bb0}
+.say:active{transform:translateY(2px);box-shadow:0 2px 0 #4b3bb0}
+.bigbox{margin:16px auto 6px;text-align:center}
+.big{display:inline-grid;place-items:center;min-width:170px;padding:6px 26px;font-size:clamp(5rem,26vw,9rem);line-height:1.25;font-weight:900;color:var(--purple);background:linear-gradient(145deg,#f3f0ff,#e5fbf5);border:3px dashed #cfc7fb;border-radius:36px;cursor:pointer;animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.sub{font-size:1.25rem;font-weight:900;margin-top:6px}
+.hint{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:16px 2px 8px;font-weight:bold;color:#5140bb}
+.meter{flex:1;height:10px;background:#ece8fb;border-radius:9px;overflow:hidden;max-width:180px}
+.meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--yellow));transition:width .3s}
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px}
+.item{position:relative;border:3px solid #ece8fb;border-radius:24px;background:linear-gradient(160deg,#fff,#f8f6ff);padding:12px 6px 10px;text-align:center;box-shadow:0 6px 0 #e6e1f8;transition:transform .15s,box-shadow .15s}
+.item:nth-child(4n+2){background:linear-gradient(160deg,#fff,#effcf8)}
+.item:nth-child(4n+3){background:linear-gradient(160deg,#fff,#fff7e6)}
+.item:nth-child(4n+4){background:linear-gradient(160deg,#fff,#fff0f5)}
+.item:hover{transform:translateY(-3px)}
+.item:active,.item.hit{animation:boing .5s}
+@keyframes boing{30%{transform:scale(1.18) rotate(-4deg)}60%{transform:scale(.95) rotate(3deg)}}
+.pic{display:block;font-size:clamp(2.8rem,13vw,4.4rem);line-height:1.15}
+.pic.multi{font-size:clamp(1.6rem,8vw,2.4rem)}
+.word{display:block;font-weight:900;font-size:1.15rem;margin-top:2px}
+.tag{display:block;font-size:.8rem;color:var(--muted)}
+.item .seen{position:absolute;top:6px;inset-inline-start:6px;display:none;background:var(--good);color:#fff;width:24px;height:24px;border-radius:50%;font-size:.8rem;line-height:24px}
+.item.seen-on{border-color:#a8e6cd;box-shadow:0 6px 0 #bdecd9}
+.item.seen-on .seen{display:block}
+.forms{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px;direction:rtl}
+.form{text-align:center;background:#f6f3ff;border-radius:18px;padding:8px 2px}
+.form b{display:block;font-size:2.6rem;line-height:1.3;color:var(--purple);font-family:"Segoe UI",Tahoma,Arial,sans-serif}
+.form small{color:var(--muted)}
+.list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.list li{display:flex;align-items:center;gap:12px;background:#f8f6ff;border-radius:18px;padding:10px 14px;font-size:1.1rem;font-weight:bold;animation:slideIn .5s both;cursor:pointer}
+.list .e{font-size:2rem}
+.story{display:grid;gap:10px;margin-top:14px}
+.line{background:#fff8e4;border-radius:18px;padding:12px 14px;font-size:1.15rem;display:none;animation:slideIn .4s both;cursor:pointer}
+.line.show{display:block}
+.reveal{margin-top:12px;border:0;background:var(--pink);color:#fff;padding:10px 16px;border-radius:14px;font-weight:900;box-shadow:0 4px 0 #d85a7b}
+.tip{margin-top:16px;background:#f0f9ff;border:1px solid #cfe9fb;border-radius:16px;padding:10px 14px;color:#285a82;font-size:.95rem}
+.nav{display:flex;gap:10px;justify-content:space-between;margin-top:16px}
+.btn{border:0;border-radius:18px;padding:13px 20px;font-weight:900;font-size:1.1rem;background:var(--purple);color:#fff;box-shadow:0 5px 0 #4b3bb0;transition:transform .12s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #4b3bb0}
+.btn.light{background:#fff;color:#5140bb;border:2px solid #d9d2fb;box-shadow:0 5px 0 #e6e1f8}
+.btn.go{background:var(--teal);box-shadow:0 5px 0 #168169}
+.btn.glow{animation:glow 1.2s infinite}
+@keyframes glow{50%{box-shadow:0 0 0 8px #20a78e33,0 5px 0 #168169}}
+.btn[disabled]{opacity:.45;pointer-events:none}
+/* game */
+.track{position:relative;height:56px;margin:2px 6px 14px;background:linear-gradient(90deg,#e5f6ff,#fdf3ff);border-radius:99px;border:2px solid #d9e8f7}
+.track .rail{position:absolute;inset:26px 26px auto 26px;height:4px;background:repeating-linear-gradient(90deg,#b8c8e0 0 10px,transparent 10px 18px);border-radius:3px}
+.track .rocket{position:absolute;top:6px;font-size:2rem;transition:inset-inline-start .7s cubic-bezier(.3,1.4,.5,1);inset-inline-start:8px}
+.track .flag{position:absolute;top:8px;inset-inline-end:10px;font-size:1.8rem}
+.qno{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-weight:bold;margin:0 4px 8px}
+.qtext{font-size:clamp(1.25rem,5vw,1.6rem);font-weight:900;line-height:1.55}
+.opts{display:grid;gap:12px;margin-top:16px}
+.opt{border:0;border-radius:22px;padding:16px 14px;font-size:clamp(1.25rem,5vw,1.6rem);font-weight:900;color:#fff;box-shadow:0 7px 0 rgba(0,0,0,.18);transition:transform .12s;min-height:68px}
+.opt:nth-child(3n+1){background:linear-gradient(145deg,#7a68ee,#5845c5)}
+.opt:nth-child(3n+2){background:linear-gradient(145deg,#29b89c,#168169)}
+.opt:nth-child(3n+3){background:linear-gradient(145deg,#ff8aa5,#e0587c)}
+.opt:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.opt.right{background:linear-gradient(145deg,#34d399,#0f9d62)!important;animation:boing .6s}
+.opt.wrong{background:linear-gradient(145deg,#ffb066,#e8590c)!important;animation:shake .45s}
+.opt[disabled]{pointer-events:none}
+.opt.dim{opacity:.4}
+@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
+.fb{min-height:2.2em;font-weight:900;font-size:1.25rem;margin:12px 4px 0;text-align:center}
+.fb.good{color:var(--good)}.fb.bad{color:var(--bad)}
+.stars-line{display:flex;gap:4px;font-size:1.4rem}
+/* reward */
+.reward{text-align:center}
+.trophy{font-size:5.5rem;animation:bob 2s ease-in-out infinite}
+.stars{display:flex;justify-content:center;gap:8px;font-size:3.6rem;margin:6px 0}
+.stars span{opacity:.25;filter:grayscale(1);transform:scale(.6);transition:.5s cubic-bezier(.3,1.6,.5,1)}
+.stars span.on{opacity:1;filter:none;transform:scale(1) rotate(8deg)}
+.sticker{display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,#fff3c8,#ffe1ec);border:3px dashed #f5b94a;border-radius:26px;padding:12px 20px;margin:14px 0;animation:stick .9s cubic-bezier(.3,1.6,.5,1) both .8s}
+@keyframes stick{from{transform:scale(0) rotate(-40deg)}to{transform:scale(1) rotate(-3deg)}}
+.sticker .em{font-size:3.4rem}
+.sticker small{display:block;color:#8a5a00;font-weight:bold}
+.actions{display:grid;gap:10px;margin-top:14px}
+/* confetti */
+.confetti{position:fixed;top:-40px;z-index:99;pointer-events:none;animation:fall linear forwards;font-size:1.6rem}
+@keyframes fall{to{transform:translateY(112vh) rotate(540deg);opacity:.9}}
+.spark{position:fixed;z-index:99;pointer-events:none;font-size:1.4rem;animation:spark .8s ease-out forwards}
+@keyframes spark{from{opacity:1;transform:translate(0,0) scale(.6)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.4)}}
+.ltr{direction:ltr;text-align:left}
+.ltr .bubble{direction:ltr}
+.err{text-align:center;padding:40px 10px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.list li{opacity:1}}
+@media(min-width:600px){.opts{grid-template-columns:1fr 1fr}.actions{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap head">
+  <a class="back" id="backLink" href="kg1.html">← الدروس</a>
+  <div class="hud"><span class="chip" title="مجموع نجومك">⭐ <span id="totalStars">0</span></span><button class="mute" id="muteBtn" aria-label="الصوت" title="الصوت">🔊</button></div>
+</div></header>
+<main class="wrap" id="app"><div class="err">⏳ جاري تحميل الدرس…</div></main>
+<script>
+window.__btErr=null;window.addEventListener('error',function(e){window.__btErr=e.message;var a=document.getElementById('app');if(a&&a.textContent.indexOf('جاري')>-1)a.innerHTML='<div class="card" style="text-align:center;padding:30px"><div style="font-size:3rem">😕</div><h2>حدثت مشكلة في تحميل الدرس</h2><p>حدّث الصفحة، أو افتحها من متصفح Chrome محدَّث.</p><a class="btn" href="kg1.html">← الدروس</a></div>'});
+</script>
+<script>
+/* BravoTen — lesson content kit: builds lesson objects from compact tables */
+(function () {
+  const BT = (window.BT = window.BT || { courses: {} });
+  const PARENT_AR = 'للأهل: دعوا الطفل يتتبع الحرف بإصبعه في الهواء، ثم على الطاولة أو في الدقيق أو الرمل، قبل القلم. شجّعوه على كل محاولة ولا تستعجلوه.';
+  const PARENT_EN = 'For parents: let your child trace the letter in the air, then on the table or in flour or sand, before using a pencil. Praise every try.';
+  const at = (arr, i) => arr[((i % arr.length) + arr.length) % arr.length];
+
+  /* ---------- Arabic letter lesson ---------- */
+  function letterAr(L, i, ALL) {
+    const others = ALL.filter((_, j) => j !== i);
+    const o2 = [at(others, i).ch, at(others, i + 3).ch];
+    const dw = [at(others, i).words[0], at(others, i + 4).words[1]];
+    const lab = (w) => w[0] + ' ' + w[1];
+    const W = L.words;
+    const ex = L.extra;
+    return {
+      t: 'حرف ' + L.name,
+      goal: 'أتعرّف على حرف ' + L.name + ' وشكله وصوته، وأميّزه في أول الكلمات وفي وسطها وآخرها.',
+      steps: [
+        { h: 'نلاحظ الحرف', big: L.ch, sub: L.h.join(' — '), p: 'هذا حرف ' + L.name + '. نسمع صوته ونكرره معًا: ' + L.h.join('، ') + '.', say: L.say + '. ' + L.h.join('، ') },
+        { h: 'كلمات تبدأ بحرف ' + L.name, p: 'نضغط على الصورة لنسمع الكلمة، ثم ننطق أول صوت فيها.', items: W.map((w) => [w[0], w[1], 'أول الكلمة']) },
+        { h: 'أشكال الحرف', p: 'يتغيّر شكل الحرف قليلًا حسب مكانه في الكلمة، لكنه نفس الحرف.', forms: L.forms },
+        { h: 'الحرف في وسط الكلمة وآخرها', p: 'ننظر جيدًا ونجد الحرف في هذه الكلمة.', items: [[ex[0], ex[1], ex[2]]] },
+        { h: 'نكتب الحرف', p: 'نرسم الحرف في الهواء، ثم على الطاولة، ثم على الورقة. نبدأ من النقطة ونتبع الاتجاه.', tip: PARENT_AR },
+      ],
+      q: [
+        { q: 'اختر حرف ' + L.name, o: [L.ch].concat(o2), a: L.ch },
+        { q: 'أي كلمة تبدأ بحرف ' + L.name + '؟', o: [lab(W[0]), lab(dw[0]), lab(dw[1])], a: lab(W[0]) },
+        { q: 'ما الحرف الأول في كلمة ' + W[1][1] + ' ' + W[1][0] + '؟', o: [L.ch].concat(o2), a: L.ch },
+        { q: 'أين نجد حرف ' + L.name + ' في كلمة ' + ex[1] + ' ' + ex[0] + '؟', o: ['أول الكلمة', 'وسط الكلمة', 'آخر الكلمة'], a: ex[2] },
+      ],
+    };
+  }
+
+  /* ---------- English phonics lesson ---------- */
+  function phonicsEn(P, i, ALL) {
+    const others = ALL.filter((_, j) => j !== i);
+    const oU = [at(others, i).U, at(others, i + 4).U];
+    const oL = [at(others, i).l, at(others, i + 4).l];
+    const dw = [at(others, i).words[0], at(others, i + 5).words[1]];
+    const lab = (w) => w[0] + ' ' + w[1];
+    const W = P.words;
+    return {
+      t: P.t || 'Phonics: ' + P.U + P.l + ' — ' + P.words.map((w) => w[1]).join(', '),
+      goal: 'I can say the sound of ' + P.U + P.l + ' and find it at the start of words.',
+      steps: [
+        { h: 'Meet the letter', big: P.U + P.l, sub: 'Capital ' + P.U + ' · small ' + P.l, p: 'This is the letter ' + P.U + '. It makes the sound /' + P.l + '/. Say it with me: ' + P.l + ', ' + P.l + ', ' + P.l + '!', say: P.U + '. ' + P.l + ', ' + P.l + ', ' + P.l + '.' },
+        { h: 'Words that start with ' + P.l, p: 'Tap a picture to listen. Then say the first sound.', items: W.map((w) => [w[0], w[1], '/' + P.l + '/']) },
+        { h: 'Trace the letter', p: 'Draw ' + P.U + ' and ' + P.l + ' in the air with your finger, then on paper.', tip: PARENT_EN },
+      ],
+      q: [
+        { q: 'Which word starts with ' + P.U + '?', o: [lab(W[0]), lab(dw[0]), lab(dw[1])], a: lab(W[0]) },
+        { q: 'Find the capital letter.', o: [P.U].concat(oU), a: P.U },
+        { q: 'Find the small letter.', o: [P.l].concat(oL), a: P.l },
+        { q: 'What is the first letter of “' + W[1][1] + '” ' + W[1][0] + '?', o: [P.U].concat(oU), a: P.U },
+      ],
+    };
+  }
+
+  /* ---------- English vocabulary lesson ---------- */
+  const GLOBAL_WORDS = ['apple', 'book', 'sun', 'dog', 'car', 'tree', 'ball', 'cat'];
+  function vocabEn(o) {
+    const withPic = o.items.filter((x) => x[0]);
+    const words = o.items.map((x) => x[1]);
+    const qs = withPic.slice(0, 4).map((it, k) => {
+      const pool = words.filter((w) => w !== it[1]).concat(GLOBAL_WORDS);
+      return { q: 'Which word is ' + it[0] + '?', o: [it[1], at(pool, k), at(pool, k + 1)], a: it[1] };
+    });
+    (o.extraQ || []).forEach((x) => qs.push(x));
+    return {
+      t: o.t,
+      goal: o.goal,
+      steps: [
+        { h: 'Listen and repeat', p: 'Tap each card to listen. Say the word out loud.', items: o.items.map((x) => [x[0] || '💬', x[1], x[2] || '']) },
+        { h: 'Say it in a sentence', p: 'Now use the words in a sentence.', list: o.sentences.map((s) => ['💬', s]), say: o.sentences.join('. ') },
+      ],
+      q: qs,
+    };
+  }
+
+  /* ---------- English colour lesson ---------- */
+  const COLOR_DOT = { red: '🔴', blue: '🔵', yellow: '🟡', green: '🟢', orange: '🟠' };
+  function colorEn(o) {
+    const dots = Object.keys(COLOR_DOT);
+    const lab = (c) => COLOR_DOT[c] + ' ' + c;
+    const qs = o.items.map((it, k) => {
+      const col = it[2] || o.name;
+      const oth = dots.filter((c) => c !== col);
+      return { q: 'What colour is the ' + it[1] + '? ' + it[0], o: [lab(col), lab(at(oth, k)), lab(at(oth, k + 2))], a: lab(col) };
+    });
+    return {
+      t: o.t,
+      goal: 'I can say the colour ' + o.name + ' and find ' + o.name + ' things.',
+      steps: [
+        { h: 'The colour ' + o.name, big: COLOR_DOT[o.name], sub: o.name + ' · ' + o.ar, p: 'This colour is ' + o.name + '. Say it with me: ' + o.name + '!', say: o.name },
+        { h: o.name + ' things', p: 'Tap a card to listen.', items: o.items.map((x) => [x[0], x[1], x[2] || o.name]) },
+        { h: 'Mini project', p: o.project, tip: o.parent || PARENT_EN },
+      ],
+      q: qs.slice(0, 3),
+    };
+  }
+
+  BT.kit = { letterAr, phonicsEn, vocabEn, colorEn, PARENT_AR, PARENT_EN };
+})();
+
+/* KG1 Arabic — first term. Order matches the curriculum map in kg1.html. */
+(function () {
+  const BT = window.BT, K = BT.kit;
+  const T = K.PARENT_AR;
+
+  const LETTERS = [
+    { ch: 'أ', name: 'الألف', say: 'ألف', h: ['أَ', 'إِ', 'أُ'], forms: [['وحده', 'ا'], ['أول', 'ا'], ['وسط', 'ـا'], ['آخر', 'ـا']], words: [['🦁', 'أَسَد'], ['🐇', 'أَرْنَب'], ['👂', 'أُذُن']], extra: ['🪓', 'فَأْس', 'وسط الكلمة'] },
+    { ch: 'ب', name: 'الباء', say: 'باء', h: ['بَ', 'بِ', 'بُ'], forms: [['وحده', 'ب'], ['أول', 'بـ'], ['وسط', 'ـبـ'], ['آخر', 'ـب']], words: [['🦆', 'بَطَّة'], ['🐄', 'بَقَرَة'], ['🏠', 'بَيْت']], extra: ['📖', 'كِتَاب', 'آخر الكلمة'] },
+    { ch: 'م', name: 'الميم', say: 'ميم', h: ['مَ', 'مِ', 'مُ'], forms: [['وحده', 'م'], ['أول', 'مـ'], ['وسط', 'ـمـ'], ['آخر', 'ـم']], words: [['🍌', 'مَوْز'], ['✂️', 'مِقَصّ'], ['🔑', 'مِفْتَاح']], extra: ['✏️', 'قَلَم', 'وسط الكلمة'] },
+    { ch: 'ح', name: 'الحاء', say: 'حاء', h: ['حَ', 'حِ', 'حُ'], forms: [['وحده', 'ح'], ['أول', 'حـ'], ['وسط', 'ـحـ'], ['آخر', 'ـح']], words: [['🐴', 'حِصَان'], ['🕊️', 'حَمَامَة'], ['🐋', 'حُوت']], extra: ['🍎', 'تُفَّاح', 'آخر الكلمة'] },
+    { ch: 'ج', name: 'الجيم', say: 'جيم', h: ['جَ', 'جِ', 'جُ'], forms: [['وحده', 'ج'], ['أول', 'جـ'], ['وسط', 'ـجـ'], ['آخر', 'ـج']], words: [['🐪', 'جَمَل'], ['🧀', 'جُبْن'], ['🔔', 'جَرَس']], extra: ['❄️', 'ثَلْج', 'آخر الكلمة'] },
+    { ch: 'د', name: 'الدال', say: 'دال', h: ['دَ', 'دِ', 'دُ'], forms: [['وحده', 'د'], ['أول', 'د'], ['وسط', 'ـد'], ['آخر', 'ـد']], words: [['🐻', 'دُبّ'], ['🐓', 'دِيك'], ['🚲', 'دَرَّاجَة']], extra: ['🌹', 'وَرْد', 'آخر الكلمة'] },
+    { ch: 'خ', name: 'الخاء', say: 'خاء', h: ['خَ', 'خِ', 'خُ'], forms: [['وحده', 'خ'], ['أول', 'خـ'], ['وسط', 'ـخـ'], ['آخر', 'ـخ']], words: [['🐑', 'خَرُوف'], ['🥒', 'خِيَار'], ['🍞', 'خُبْز']], extra: ['🌴', 'نَخْلَة', 'وسط الكلمة'] },
+    { ch: 'ت', name: 'التاء', say: 'تاء', h: ['تَ', 'تِ', 'تُ'], forms: [['وحده', 'ت'], ['أول', 'تـ'], ['وسط', 'ـتـ'], ['آخر', 'ـت']], words: [['🐊', 'تِمْسَاح'], ['🍎', 'تُفَّاحَة'], ['👑', 'تَاج']], extra: ['🌱', 'نَبَات', 'وسط الكلمة'] },
+    { ch: 'ل', name: 'اللام', say: 'لام', h: ['لَ', 'لِ', 'لُ'], forms: [['وحده', 'ل'], ['أول', 'لـ'], ['وسط', 'ـلـ'], ['آخر', 'ـل']], words: [['🍋', 'لَيْمُون'], ['🥛', 'لَبَن'], ['🧸', 'لُعْبَة']], extra: ['⛰️', 'جَبَل', 'وسط الكلمة'] },
+    { ch: 'س', name: 'السين', say: 'سين', h: ['سَ', 'سِ', 'سُ'], forms: [['وحده', 'س'], ['أول', 'سـ'], ['وسط', 'ـسـ'], ['آخر', 'ـس']], words: [['🐟', 'سَمَكَة'], ['🐢', 'سُلَحْفَاة'], ['🚗', 'سَيَّارَة']], extra: ['🪑', 'كُرْسِي', 'وسط الكلمة'] },
+    { ch: 'ن', name: 'النون', say: 'نون', h: ['نَ', 'نِ', 'نُ'], forms: [['وحده', 'ن'], ['أول', 'نـ'], ['وسط', 'ـنـ'], ['آخر', 'ـن']], words: [['🐝', 'نَحْلَة'], ['🐯', 'نَمِر'], ['⭐', 'نَجْمَة']], extra: ['🍇', 'عِنَب', 'آخر الكلمة'] },
+  ];
+  const LET = {};
+  LETTERS.forEach((L, i) => (LET[L.name] = K.letterAr(L, i, LETTERS)));
+  const L = (n) => LET[n];
+
+  /* ---------------- Unit 1: التهيئة ---------------- */
+  const u1 = [
+    {
+      t: 'آداب قاعة النشاط',
+      goal: 'أتعلّم كيف أتصرّف في قاعة النشاط وأحترم زملائي ومعلمتي.',
+      steps: [
+        { h: 'قواعد قاعتنا', p: 'نحب قاعتنا ونحافظ عليها. هذه قواعدنا:', list: [['🤫', 'ندخل القاعة بهدوء.'], ['👂', 'نستمع جيدًا لمعلمتنا.'], ['✋', 'نرفع يدنا قبل أن نتكلم.'], ['🎒', 'نرتب أدواتنا بعد اللعب.'], ['🤝', 'نشارك أصدقاءنا ونقول: من فضلك وشكرًا.']] },
+        { h: 'أنا أتصرّف بأدب', p: 'عندما أحتاج شيئًا أقول: «من فضلك». وعندما يساعدني أحد أقول: «شكرًا». وعندما أخطئ أقول: «آسف».', items: [['🙏', 'من فضلك'], ['💛', 'شكرًا'], ['🤗', 'آسف']] },
+      ],
+      q: [
+        { q: 'ماذا نفعل قبل أن نتكلم في القاعة؟', o: ['نرفع أيدينا', 'نصرخ', 'نجري'], a: 'نرفع أيدينا' },
+        { q: 'ماذا نقول عندما يساعدنا صديق؟', o: ['شكرًا', 'لا أريد', 'اذهب'], a: 'شكرًا' },
+        { q: 'كيف ندخل القاعة؟', o: ['بهدوء', 'بالجري', 'بالصراخ'], a: 'بهدوء' },
+      ],
+    },
+    {
+      t: 'الوعي البصري',
+      goal: 'ألاحظ الصور بعناية: أجد المختلف، وأقارن الأحجام، وأكمل الشكل الناقص.',
+      steps: [
+        { h: 'أنظر جيدًا', p: 'العينان تساعداننا على اكتشاف التفاصيل. ننظر إلى الصورة ونبحث عن الأشياء المختلفة والمتشابهة.', items: [['👀', 'أنظر'], ['🔍', 'أبحث'], ['✅', 'أجد']] },
+        { h: 'كبير وصغير', p: 'نقارن الأحجام: الفيل كبير والفأر صغير. القلم الطويل يختلف عن القلم القصير.', items: [['🐘', 'كبير'], ['🐭', 'صغير'], ['📏', 'طويل'], ['✂️', 'قصير']] },
+        { h: 'نكمل الوجه', p: 'الوجه فيه عينان وأنف وفم وأذنان. عندما ينقص جزء نعرف مكانه ونكمل الصورة.', items: [['👀', 'عينان'], ['👃', 'أنف'], ['👄', 'فم'], ['👂', 'أذن']] },
+      ],
+      q: [
+        { q: '🍎 🍎 🍌 🍎 — أيّها مختلف؟', o: ['🍎', '🍌'], a: '🍌' },
+        { q: '🐘 🐭 — أيّهما أصغر؟', o: ['🐘', '🐭'], a: '🐭' },
+        { q: 'أيّ جزء ينقص الوجه؟ 🙂 (بلا أنف)', o: ['👃 أنف', '🦶 قدم', '🎒 حقيبة'], a: '👃 أنف' },
+      ],
+    },
+    {
+      t: 'الوعي الصوتي',
+      goal: 'أستمع إلى الأصوات المختلفة وأميّز بينها، وأعرف أول صوت في الكلمة.',
+      steps: [
+        { h: 'أصوات حولنا', p: 'نسمع أصواتًا كثيرة. بعضها عالٍ وبعضها هادئ. نضغط على الصورة ونقلّد الصوت.', items: [['🐱', 'القطة: مياو'], ['🐶', 'الكلب: هاو هاو'], ['🐄', 'البقرة: موو'], ['🐓', 'الديك: كوكو كوكو'], ['🔔', 'الجرس: دينج']] },
+        { h: 'أول صوت', p: 'كل كلمة لها صوت في أولها. بطة وبقرة وبيت تبدأ بنفس الصوت (بَ). نستمع ونقلّد.', items: [['🦆', 'بَطَّة', 'بَ'], ['🐄', 'بَقَرَة', 'بَ'], ['🏠', 'بَيْت', 'بَ']] },
+      ],
+      q: [
+        { q: 'من يقول «موو»؟', o: ['🐄 بقرة', '🐱 قطة', '🐶 كلب'], a: '🐄 بقرة' },
+        { q: 'أيّ كلمة تبدأ بنفس صوت «بَطَّة»؟', o: ['🐄 بَقَرَة', '🐱 قِطَّة', '🐘 فِيل'], a: '🐄 بَقَرَة' },
+        { q: 'أيّهما صوته أعلى؟', o: ['🔔 جرس', '🤫 همس'], a: '🔔 جرس' },
+      ],
+    },
+    {
+      t: 'مهارات الإدراك',
+      goal: 'أرتّب الأحداث، وأكمل النمط، وأربط الأشياء ببعضها.',
+      steps: [
+        { h: 'أرتب يومي', p: 'يومنا له ترتيب: أستيقظ أولًا، ثم أغسل وجهي، ثم أذهب إلى المدرسة.', list: [['1️⃣', 'أستيقظ من النوم.'], ['2️⃣', 'أغسل وجهي وأسناني.'], ['3️⃣', 'أذهب إلى المدرسة.']] },
+        { h: 'النمط', p: 'النمط شيء يتكرر بترتيب ثابت: تفاحة حمراء ثم خضراء، ثم حمراء ثم خضراء...', items: [['🍎', 'حمراء'], ['🍏', 'خضراء'], ['🍎', 'حمراء'], ['🍏', 'خضراء']] },
+        { h: 'ماذا يناسب ماذا؟', p: 'الطبيب يستخدم السماعة. المعلمة تستخدم القلم. الطاهي يستخدم الملعقة.', items: [['🩺', 'سماعة'], ['🖊️', 'قلم'], ['🥄', 'ملعقة']] },
+      ],
+      q: [
+        { q: '🍎 🍏 🍎 🍏 🍎 ❓ — ما التالي؟', o: ['🍏', '🍎'], a: '🍏' },
+        { q: 'ماذا نفعل بعد الاستيقاظ؟', o: ['نغسل وجهنا', 'نذهب إلى النوم'], a: 'نغسل وجهنا' },
+        { q: 'ماذا يستخدم الطبيب؟', o: ['🩺 سماعة', '🥄 ملعقة', '🖊️ قلم'], a: '🩺 سماعة' },
+      ],
+    },
+    {
+      t: 'الاستعداد للكتابة',
+      goal: 'أتدرّب على الخطوط وأمسك القلم بطريقة صحيحة.',
+      steps: [
+        { h: 'أمسك القلم', p: 'أمسك القلم بالإبهام والسبابة والوسطى بهدوء، وليس بقبضة اليد كلها. أجلس مستقيمًا وأضع الورقة أمامي.', tip: 'للأهل: يمكن البدء بقطع طباشير أو أقلام شمع قصيرة لتشجيع القبضة الصحيحة.' },
+        { h: 'خطوط نتتبعها', p: 'نتتبع الخطوط من اليمين إلى اليسار بإصبعنا ثم بالقلم.', items: [['➖', 'خط مستقيم'], ['〰️', 'خط متعرج'], ['🌙', 'خط منحنٍ'], ['⭕', 'دائرة']] },
+        { h: 'أرسم في الهواء', p: 'قبل الورقة نرسم الخط في الهواء بإصبعنا، ثم على الطاولة. هذا يجهّز يدي لكتابة الحروف.' },
+      ],
+      q: [
+        { q: 'كيف نمسك القلم؟', o: ['بثلاثة أصابع بهدوء', 'بقبضة اليد كلها'], a: 'بثلاثة أصابع بهدوء' },
+        { q: 'أيّ شكل دائرة؟', o: ['⭕', '🔺', '⬛'], a: '⭕' },
+        { q: 'من أين نبدأ تتبع الخط في اللغة العربية؟', o: ['من اليمين', 'من اليسار'], a: 'من اليمين' },
+      ],
+    },
+    {
+      t: 'مهارة التحدث',
+      goal: 'أتحدث بجمل كاملة عن نفسي وعن الصور التي أراها.',
+      steps: [
+        { h: 'أقدّم نفسي', p: 'أبدأ بالتحية ثم أقول اسمي وما أحب.', list: [['👋', 'السلام عليكم.'], ['🙂', 'اسمي ... .'], ['💛', 'أنا أحب ... .']] },
+        { h: 'أصف الصورة', p: 'أنظر إلى الصورة وأقول من فيها وماذا يفعل: الطفل يلعب، البنت تضحك، الفلاح يسقي الزرع.', items: [['⚽', 'الولد يلعب'], ['🌱', 'الفلاح يزرع'], ['🐄', 'البقرة في المزرعة']] },
+        { h: 'أحكي قصة صغيرة', p: 'لكل قصة بداية ووسط ونهاية. أرتب الصور وأحكي: أولًا... ثم... وأخيرًا...' },
+      ],
+      q: [
+        { q: 'كيف نبدأ التحية؟', o: ['السلام عليكم', 'اذهب بعيدًا'], a: 'السلام عليكم' },
+        { q: 'أيّ جملة كاملة؟', o: ['أنا أحب اللعب', 'اللعب'], a: 'أنا أحب اللعب' },
+        { q: '🌱 الفلاح ... الزرع.', o: ['يسقي', 'يطير'], a: 'يسقي' },
+      ],
+    },
+    {
+      t: 'التمهيد لتعلم الحروف العربية',
+      goal: 'أعرف أن للحرف شكلًا وصوتًا واتجاهًا، وأقلّد الحرف بالصلصال والرسم.',
+      steps: [
+        { h: 'اتجاه الأشياء', p: 'ننظر إلى الأشكال ونحدد الاتجاه: إلى اليمين أو إلى اليسار. الكتابة العربية تبدأ من اليمين.', items: [['➡️', 'يمين'], ['⬅️', 'يسار']] },
+        { h: 'نصنع الحرف', p: 'نشكّل الحرف بالصلصال أو الرمل أو نرسم في الهواء. الحرف الواحد قد يشبه خطًا مستقيمًا أو منحنيًا أو نقطًا.' },
+        { h: 'الحرف والصوت', p: 'كل حرف له اسم وله صوت. في الدروس القادمة سنتعلم: أ ب م ح ج د ثم خ ت ل س ن.', items: [['🦁', 'أَسَد', 'أ'], ['🦆', 'بَطَّة', 'ب'], ['🍌', 'مَوْز', 'م']] },
+      ],
+      q: [
+        { q: 'من أين نبدأ الكتابة بالعربية؟', o: ['من اليمين', 'من اليسار'], a: 'من اليمين' },
+        { q: 'أيّ كلمة تبدأ بصوت «مَ»؟', o: ['🍌 مَوْز', '🦁 أَسَد', '🐟 سَمَكَة'], a: '🍌 مَوْز' },
+        { q: 'ماذا لكل حرف؟', o: ['اسم وصوت وشكل', 'شكل فقط'], a: 'اسم وصوت وشكل' },
+      ],
+    },
+  ];
+
+  /* ---------------- Unit 2: أنا وأسرتي ---------------- */
+  const u2 = [
+    {
+      t: 'قصة استماع: أسرتي الحبيبة',
+      goal: 'أستمع إلى قصة عن أسرة وأجيب عن أسئلتها.',
+      steps: [
+        { h: 'نستمع للقصة', story: ['في صباح مشمس، استيقظت ليلى وقالت: «صباح الخير يا أمي».', 'ساعدت أمها في ترتيب مائدة الإفطار، وجاء أبوها يبتسم.', 'بعد الإفطار لعبت ليلى مع أخيها الصغير بالمكعبات.', 'وفي المساء زارتهم جدتهم، فاجتمعت الأسرة كلها وضحكوا معًا.', 'قالت ليلى وهي سعيدة: «أنا أحب أسرتي».'], p: 'القصة من تأليف برافوتِن لتدريب الاستماع.' },
+        { h: 'نتذكر الشخصيات', p: 'من ظهر في القصة؟', items: [['👧', 'ليلى'], ['👩', 'الأم'], ['👨', 'الأب'], ['👶', 'الأخ الصغير'], ['👵', 'الجدة']] },
+      ],
+      q: [
+        { q: 'ماذا قالت ليلى في الصباح؟', o: ['صباح الخير يا أمي', 'أريد أن أنام'], a: 'صباح الخير يا أمي' },
+        { q: 'مع من لعبت ليلى؟', o: ['أخيها الصغير', 'جارتها'], a: 'أخيها الصغير' },
+        { q: 'من زارهم في المساء؟', o: ['👵 الجدة', '🧑‍🏫 المعلمة'], a: '👵 الجدة' },
+      ],
+    },
+    {
+      t: 'هذا أنا',
+      goal: 'أتعرّف على نفسي: ولد أو بنت، وشعري وعيناي وما أحب.',
+      steps: [
+        { h: 'أنا', p: 'أنا لي اسم، ولي وجه. أنا ولد أو أنا بنت. لي شعر وعينان أرى بهما.', items: [['👦', 'أنا ولد'], ['👧', 'أنا بنت'], ['👀', 'عيناي'], ['💇', 'شعري']] },
+        { h: 'ما أحب', p: 'كل واحد يحب أشياء مختلفة: الكرة، الكتب، الرسم، المكعبات. أقول: أنا أحب ... .', items: [['⚽', 'الكرة'], ['📚', 'الكتب'], ['🎨', 'الرسم'], ['🧱', 'المكعبات']] },
+      ],
+      q: [
+        { q: '👦 أيّ جملة تناسب الولد؟', o: ['أنا ولد', 'أنا بنت'], a: 'أنا ولد' },
+        { q: '👀 ماذا نرى بالعينين؟', o: ['نرى الأشياء', 'نسمع الأصوات'], a: 'نرى الأشياء' },
+        { q: 'أيّ شيء يمكن أن أحبه؟', o: ['⚽ الكرة', '🧱 المكعبات', 'كلاهما'], a: 'كلاهما' },
+      ],
+    },
+    L('الألف'),
+    {
+      t: 'أمي وأبي',
+      goal: 'أتعرّف على أمي وأبي وأعبّر عن حبي لهما.',
+      steps: [
+        { h: 'أمي وأبي', p: 'أمي وأبي يحباني ويعتنيان بي. أقول لهما: أحبكما.', items: [['👩', 'أمي'], ['👨', 'أبي']] },
+        { h: 'نفعل معًا', p: 'أحب أن أفعل أشياء مع أمي وأبي: نقرأ قصة، نلعب، نأكل معًا، ونتمشى.', items: [['📖', 'نقرأ قصة'], ['🍽️', 'نأكل معًا'], ['🚶', 'نتمشى']] },
+        { h: 'كيف أشكرهما', p: 'عندما يساعداني أقول: شكرًا. وأعبّر عن حبي بعناق أو رسمة أو كلمة طيبة.', items: [['🤗', 'عناق'], ['🎨', 'رسمة'], ['💛', 'شكرًا']] },
+      ],
+      q: [
+        { q: 'اختر صورة أمي.', o: ['👩 أمي', '👨 أبي', '👵 جدتي'], a: '👩 أمي' },
+        { q: 'ماذا نقول لأمي وأبي عندما يساعداننا؟', o: ['شكرًا', 'اذهبا'], a: 'شكرًا' },
+        { q: 'كيف أعبّر عن حبي؟', o: ['🤗 بعناق', '😠 بالصراخ'], a: '🤗 بعناق' },
+      ],
+    },
+    L('الباء'),
+    {
+      t: 'إخوتي وألعابي',
+      goal: 'أتعرف على أخي وأختي، وألعب معهما بلطف.',
+      steps: [
+        { h: 'أخي وأختي', p: 'أخي ولد وأختي بنت. هما من أسرتي ونلعب معًا.', items: [['👦', 'أخي'], ['👧', 'أختي'], ['🧒', 'أنا']] },
+        { h: 'ألعابنا', p: 'ألعابنا كثيرة: كرة وسيارة ومكعبات وعروسة. نشارك ألعابنا ولا نتشاجر.', items: [['⚽', 'كرة'], ['🚗', 'سيارة'], ['🧱', 'مكعبات'], ['🧸', 'دب']] },
+      ],
+      q: [
+        { q: 'اختر صورة أخي.', o: ['👦 أخي', '👧 أختي'], a: '👦 أخي' },
+        { q: 'ماذا نفعل بألعابنا؟', o: ['نشارك أصدقاءنا', 'نخبّئها'], a: 'نشارك أصدقاءنا' },
+        { q: 'أيّ شيء لعبة؟', o: ['⚽ كرة', '🍽️ طبق'], a: '⚽ كرة' },
+      ],
+    },
+    L('الميم'),
+    {
+      t: 'بيتي الجميل',
+      goal: 'أتعرّف على أجزاء البيت وما نفعله في كل مكان.',
+      steps: [
+        { h: 'أجزاء البيت', p: 'بيتنا فيه غرفة للنوم ومطبخ وحمّام وغرفة للجلوس.', items: [['🛏️', 'غرفة النوم'], ['🍳', 'المطبخ'], ['🛁', 'الحمام'], ['🛋️', 'غرفة الجلوس']] },
+        { h: 'ماذا نفعل أين؟', p: 'ننام في غرفة النوم، ونأكل ونطبخ في المطبخ، ونستحم في الحمّام، ونلعب ونحكي في غرفة الجلوس.', list: [['😴', 'أنام في غرفة النوم.'], ['🍽️', 'أتناول طعامي في المطبخ.'], ['🛁', 'أستحم في الحمّام.']] },
+      ],
+      q: [
+        { q: 'أين ننام؟', o: ['🛏️ غرفة النوم', '🍳 المطبخ'], a: '🛏️ غرفة النوم' },
+        { q: 'أين نستحم؟', o: ['🛁 الحمام', '🛋️ غرفة الجلوس'], a: '🛁 الحمام' },
+        { q: 'أين يُطبخ الطعام؟', o: ['🍳 المطبخ', '🛏️ غرفة النوم'], a: '🍳 المطبخ' },
+      ],
+    },
+    L('الحاء'),
+    {
+      t: 'جدي وجدتي',
+      goal: 'أتعرّف على جدي وجدتي وأحبهما وأقدّم لهما هدية.',
+      steps: [
+        { h: 'جدي وجدتي', p: 'جدي هو أبو أمي أو أبو أبي. وجدتي هي أم أمي أو أم أبي. يحبانني كثيرًا.', items: [['👴', 'جدي'], ['👵', 'جدتي']] },
+        { h: 'أنشطة مع جدي وجدتي', p: 'أحب أن أسمع حكايات جدتي، وأمشي مع جدي في الحديقة، وأقدّم لهما رسمة جميلة.', items: [['📖', 'نقرأ'], ['🌳', 'نتمشى'], ['🎁', 'هدية']] },
+      ],
+      q: [
+        { q: 'اختر صورة جدتي.', o: ['👵 جدتي', '👴 جدي'], a: '👵 جدتي' },
+        { q: 'ماذا أقدّم لجدي؟', o: ['🎁 هدية', '🗑️ قمامة'], a: '🎁 هدية' },
+        { q: 'من يحكي لنا الحكايات؟', o: ['👵 جدتي', '🐶 الكلب'], a: '👵 جدتي' },
+      ],
+    },
+    L('الجيم'),
+    {
+      t: 'أنشودة: أسرتي',
+      goal: 'أردد أنشودة صغيرة عن الأسرة.',
+      steps: [
+        { h: 'أنشودة الأسرة', p: 'أنشودة من تأليف برافوتِن. نرددها بصوت هادئ ونصفق معًا.', story: ['في بيتنا شمسٌ وضحك،', 'أمي تبتسم وأبي يلعب،', 'جدّتي تحكي لنا قصة،', 'ونحن معًا سعداء.'] },
+        { h: 'نتحدث عن الأنشودة', p: 'من ذكرنا في الأنشودة؟', items: [['👩', 'أمي'], ['👨', 'أبي'], ['👵', 'جدتي']] },
+      ],
+      q: [
+        { q: 'من يبتسم في الأنشودة؟', o: ['👩 أمي', '🐶 الكلب'], a: '👩 أمي' },
+        { q: 'من يحكي القصة؟', o: ['👵 جدتي', '👦 أخي'], a: '👵 جدتي' },
+        { q: 'كيف نشعر في بيتنا؟', o: ['سعداء', 'حزينين'], a: 'سعداء' },
+      ],
+    },
+    L('الدال'),
+    {
+      t: 'أنا أعبر',
+      goal: 'أتحدث عن نفسي وعن أسرتي وألعابي.',
+      steps: [
+        { h: 'أعرّف نفسي', p: 'أقول اسمي كاملًا، وأذكر أسماء أفراد أسرتي، وما أحب أن أفعل.', list: [['🙂', 'اسمي ... .'], ['👨‍👩‍👧', 'أسرتي: أمي وأبي وإخوتي.'], ['⚽', 'ألعب مع أصدقائي.']] },
+        { h: 'أتحدث عن صورة', p: 'أنظر إلى صورة الأسرة وأقول جملًا كاملة: الأب يقرأ، الأم تبتسم، الأطفال يلعبون.' },
+      ],
+      q: [
+        { q: 'أيّ جملة كاملة؟', o: ['أنا أحب أسرتي', 'أسرتي'], a: 'أنا أحب أسرتي' },
+        { q: 'ماذا أقول أولًا عندما أعرّف نفسي؟', o: ['اسمي', 'مع السلامة'], a: 'اسمي' },
+        { q: 'من أفراد الأسرة؟', o: ['👩 أمي', '🚗 سيارة'], a: '👩 أمي' },
+      ],
+    },
+    {
+      t: 'أنا تعلمت',
+      goal: 'أراجع حروف الوحدة الثانية: أ ب م ح ج د.',
+      steps: [
+        { h: 'حروفنا', p: 'تعلمنا ستة حروف في هذه الوحدة. ننطقها معًا ونتذكر كلمة لكل حرف.', items: [['🦁', 'أَسَد', 'أ'], ['🏠', 'بَيْت', 'ب'], ['🍌', 'مَوْز', 'م'], ['🐴', 'حِصَان', 'ح'], ['🐪', 'جَمَل', 'ج'], ['🐻', 'دُبّ', 'د']] },
+      ],
+      q: [
+        { q: 'ما الحرف الأول في كلمة 🐴 حِصَان؟', o: ['ح', 'ج', 'د'], a: 'ح' },
+        { q: 'ما الحرف الأول في كلمة 🐪 جَمَل؟', o: ['ج', 'ب', 'م'], a: 'ج' },
+        { q: 'ما الحرف الأول في كلمة 🐻 دُبّ؟', o: ['د', 'أ', 'ح'], a: 'د' },
+        { q: 'ما الحرف الأول في كلمة 🦁 أَسَد؟', o: ['أ', 'ب', 'م'], a: 'أ' },
+      ],
+    },
+  ];
+
+  /* ---------------- Unit 3: الطبيعة من حولي ---------------- */
+  const u3 = [
+    {
+      t: 'قصة استماع: رحلة أرنوب في الطبيعة',
+      goal: 'أستمع إلى قصة عن الطبيعة وأتذكر أحداثها.',
+      steps: [
+        { h: 'نستمع للقصة', story: ['استيقظ أرنوب في الصباح وخرج من بيته.', 'رأى الشمس تضيء السماء وسمع العصافير تغرّد.', 'مرّ بحقل الزهور، فوجد زهورًا حمراء وصفراء وزرقاء.', 'جلس بجانب شجرة خضراء، ثم ذهب إلى البحر وسمع صوت الموج.', 'عاد أرنوب إلى بيته وهو يقول: «الطبيعة جميلة، وأنا أحبها».'], p: 'القصة من تأليف برافوتِن لتدريب الاستماع.' },
+        { h: 'ماذا رأى أرنوب؟', p: 'نتذكر ما رآه أرنوب في رحلته.', items: [['☀️', 'الشمس'], ['🌸', 'الزهور'], ['🌳', 'الشجرة'], ['🌊', 'البحر']] },
+      ],
+      q: [
+        { q: 'ماذا رأى أرنوب في السماء؟', o: ['☀️ الشمس', '🚗 سيارة'], a: '☀️ الشمس' },
+        { q: 'أين ذهب أرنوب في النهاية؟', o: ['🌊 البحر', '🏫 المدرسة'], a: '🌊 البحر' },
+        { q: 'ما ألوان الزهور في القصة؟', o: ['حمراء وصفراء وزرقاء', 'سوداء فقط'], a: 'حمراء وصفراء وزرقاء' },
+      ],
+    },
+    {
+      t: 'الزهور والألوان',
+      goal: 'أتعرّف على الزهور وألوانها: أحمر وأصفر وأزرق.',
+      steps: [
+        { h: 'زهور ملونة', p: 'الزهور جميلة وألوانها كثيرة. هذه ثلاثة ألوان:', items: [['🌹', 'وردة حمراء', 'أحمر'], ['🌻', 'زهرة صفراء', 'أصفر'], ['🔵', 'لون أزرق', 'أزرق']] },
+        { h: 'فائدة الزهور', p: 'الزهور تجعل المكان جميلًا وتعطينا رائحة طيبة. نسقيها بالماء ولا نقطفها بلا سبب.', items: [['💧', 'نسقي'], ['👃', 'نشم'], ['🏡', 'نزيّن']] },
+      ],
+      q: [
+        { q: '🌹 ما لون الوردة؟', o: ['أحمر', 'أزرق', 'أصفر'], a: 'أحمر' },
+        { q: '🌻 ما لون زهرة عباد الشمس؟', o: ['أصفر', 'أحمر', 'أخضر'], a: 'أصفر' },
+        { q: 'ماذا نفعل للزهور؟', o: ['نسقيها', 'نكسرها'], a: 'نسقيها' },
+      ],
+    },
+    L('الخاء'),
+    {
+      t: 'أشجار خضراء',
+      goal: 'أتعرّف على أنواع الأشجار وأجزاءها.',
+      steps: [
+        { h: 'أنواع الأشجار', p: 'هناك أشجار كثيرة: نخلة وشجرة تفاح وشجرة موز وشجرة برتقال.', items: [['🌴', 'نخلة'], ['🍎', 'شجرة تفاح'], ['🍌', 'شجرة موز'], ['🍊', 'شجرة برتقال']] },
+        { h: 'أجزاء الشجرة', p: 'للشجرة جذور في الأرض، وجذع قوي، وأغصان وأوراق خضراء، وقد تحمل ثمارًا.', list: [['🌱', 'الجذور تحت الأرض.'], ['🪵', 'الجذع قوي.'], ['🍃', 'الأوراق خضراء.']] },
+      ],
+      q: [
+        { q: 'أين توجد جذور الشجرة؟', o: ['تحت الأرض', 'في السماء'], a: 'تحت الأرض' },
+        { q: 'ما لون أوراق الشجرة؟', o: ['أخضر', 'أسود'], a: 'أخضر' },
+        { q: 'أيّ شجرة تحمل البرتقال؟', o: ['🍊 شجرة برتقال', '🌴 نخلة'], a: '🍊 شجرة برتقال' },
+      ],
+    },
+    L('التاء'),
+    {
+      t: 'الشمس والقمر',
+      goal: 'أميّز بين الشمس والقمر والنهار والليل.',
+      steps: [
+        { h: 'الشمس والقمر', p: 'نرى الشمس في النهار وتعطينا الضوء والدفء. ونرى القمر والنجوم في الليل.', items: [['☀️', 'الشمس', 'نهارًا'], ['🌙', 'القمر', 'ليلًا'], ['⭐', 'النجوم', 'ليلًا']] },
+        { h: 'ماذا نفعل؟', p: 'في النهار نلعب ونذهب إلى المدرسة. في الليل ننام لنرتاح.', items: [['⚽', 'نلعب', 'نهارًا'], ['😴', 'ننام', 'ليلًا']] },
+      ],
+      q: [
+        { q: 'متى نرى القمر؟', o: ['ليلًا', 'نهارًا'], a: 'ليلًا' },
+        { q: 'ماذا نفعل في الليل؟', o: ['😴 ننام', '⚽ نلعب الكرة في الشمس'], a: '😴 ننام' },
+        { q: 'ماذا تعطينا الشمس؟', o: ['ضوءًا ودفئًا', 'مطرًا فقط'], a: 'ضوءًا ودفئًا' },
+      ],
+    },
+    L('اللام'),
+    {
+      t: 'البحر',
+      goal: 'أتعرّف على البحر وبعض الكائنات التي تعيش فيه.',
+      steps: [
+        { h: 'في البحر', p: 'البحر كبير وماؤه مالح. تعيش فيه كائنات كثيرة.', items: [['🐬', 'دلفين'], ['🐟', 'سمكة'], ['🐚', 'صدفة'], ['🐙', 'أخطبوط'], ['⛵', 'مركب']] },
+        { h: 'من يعيش أين؟', p: 'السمكة تعيش في الماء. الأرنب يعيش على اليابسة. والطائر يطير في الهواء.', list: [['🐟', 'السمكة في البحر.'], ['🐇', 'الأرنب على الأرض.'], ['🐦', 'الطائر في السماء.']] },
+      ],
+      q: [
+        { q: 'من يعيش في البحر؟', o: ['🐟 سمكة', '🐇 أرنب'], a: '🐟 سمكة' },
+        { q: 'ما اسم هذا؟ ⛵', o: ['مركب', 'سيارة'], a: 'مركب' },
+        { q: 'أين يعيش الأرنب؟', o: ['على الأرض', 'في البحر'], a: 'على الأرض' },
+      ],
+    },
+    L('السين'),
+    {
+      t: 'أنا أزرع',
+      goal: 'أتعلم خطوات زراعة نبتة صغيرة.',
+      steps: [
+        { h: 'خطوات الزراعة', p: 'أزرع نبتة وأعتني بها كل يوم.', list: [['🪴', '1) نضع التراب في الإناء.'], ['🌰', '2) نضع البذرة ونغطيها.'], ['💧', '3) نسقيها بالماء.'], ['☀️', '4) نضعها في مكان فيه شمس.']] },
+        { h: 'ماذا تحتاج النبتة؟', p: 'تحتاج النبتة إلى الماء والشمس والتربة لتنمو.', items: [['💧', 'ماء'], ['☀️', 'شمس'], ['🪴', 'تربة']] },
+      ],
+      q: [
+        { q: 'ماذا نفعل بعد وضع البذرة؟', o: ['نسقيها', 'نرميها'], a: 'نسقيها' },
+        { q: 'ماذا تحتاج النبتة؟', o: ['ماء وشمس وتربة', 'حلوى'], a: 'ماء وشمس وتربة' },
+        { q: 'أين نضع النبتة؟', o: ['☀️ في مكان فيه شمس', '🌑 في مكان مظلم'], a: '☀️ في مكان فيه شمس' },
+      ],
+    },
+    L('النون'),
+    {
+      t: 'أنشودة: انظر حولك',
+      goal: 'أردد أنشودة قصيرة عن الطبيعة.',
+      steps: [
+        { h: 'أنشودة الطبيعة', p: 'أنشودة من تأليف برافوتِن. نردد معًا ونشير إلى الصور.', story: ['شمسٌ تقول: صباح الخير،', 'زهرةٌ تضحك فوق الغصن،', 'بحرٌ يغنّي بصوتٍ هادئ،', 'والعصافير تغرّد لنا.'] },
+        { h: 'نتذكر', p: 'من ذكرنا في الأنشودة؟', items: [['☀️', 'الشمس'], ['🌸', 'الزهرة'], ['🌊', 'البحر'], ['🐦', 'العصافير']] },
+      ],
+      q: [
+        { q: 'من يقول صباح الخير؟', o: ['☀️ الشمس', '🌙 القمر'], a: '☀️ الشمس' },
+        { q: 'من يغنّي بصوت هادئ؟', o: ['🌊 البحر', '🚗 السيارة'], a: '🌊 البحر' },
+        { q: 'ماذا تفعل العصافير؟', o: ['تغرّد', 'تنام في البحر'], a: 'تغرّد' },
+      ],
+    },
+    {
+      t: 'مراجعة',
+      goal: 'أراجع حروف الوحدة: خ ت ل س ن، وأميّز الأصوات في أول الكلمات.',
+      steps: [
+        { h: 'نراجع الحروف', p: 'نضغط على كل صورة وننطق الكلمة، ثم نحدد الحرف الأول.', items: [['🐑', 'خَرُوف', 'خ'], ['🐊', 'تِمْسَاح', 'ت'], ['🥛', 'لَبَن', 'ل'], ['🐟', 'سَمَكَة', 'س'], ['🐝', 'نَحْلَة', 'ن']] },
+      ],
+      q: [
+        { q: 'ما الحرف الأول في كلمة 🐑 خَرُوف؟', o: ['خ', 'ت', 'ن'], a: 'خ' },
+        { q: 'ما الحرف الأول في كلمة 🥛 لَبَن؟', o: ['ل', 'س', 'ت'], a: 'ل' },
+        { q: 'ما الحرف الأول في كلمة 🐝 نَحْلَة؟', o: ['ن', 'خ', 'س'], a: 'ن' },
+        { q: 'ما الحرف الأول في كلمة 🐟 سَمَكَة؟', o: ['س', 'ل', 'ت'], a: 'س' },
+      ],
+    },
+    {
+      t: 'أنا أعبر',
+      goal: 'أتحدث عن الطبيعة وما أفعله فيها.',
+      steps: [
+        { h: 'أصف الطبيعة', p: 'أنظر إلى صورة الطبيعة وأقول: أرى شجرة، أرى شمسًا، أرى بحرًا. أحب الطبيعة لأنها جميلة.', list: [['🌳', 'أرى شجرة خضراء.'], ['☀️', 'أرى الشمس.'], ['🌊', 'أرى البحر.']] },
+        { h: 'ماذا أفعل؟', p: 'أصف ما يفعله كل طفل: يأكل، يسقي الزهرة، ينام.', items: [['🍽️', 'يأكل'], ['🌷', 'يسقي زهرة'], ['😴', 'ينام']] },
+      ],
+      q: [
+        { q: 'أيّ جملة تصف الطبيعة؟', o: ['أرى شجرة خضراء', 'أرى حاسوبًا'], a: 'أرى شجرة خضراء' },
+        { q: 'ماذا يفعل من يسقي الزهرة؟', o: ['يعتني بها', 'يكسرها'], a: 'يعتني بها' },
+        { q: 'أين ننام؟', o: ['في السرير', 'على الشجرة'], a: 'في السرير' },
+      ],
+    },
+    {
+      t: 'أنا تعلمت',
+      goal: 'أراجع حروف خ ت ل س ن وأميّز مكانها في الكلمات.',
+      steps: [
+        { h: 'حروفنا الجديدة', p: 'تعلمنا خمسة حروف: الخاء والتاء واللام والسين والنون.', items: [['🐑', 'خَرُوف', 'خ'], ['🐊', 'تِمْسَاح', 'ت'], ['🍋', 'لَيْمُون', 'ل'], ['🐟', 'سَمَكَة', 'س'], ['🐝', 'نَحْلَة', 'ن']] },
+      ],
+      q: [
+        { q: 'أيّ حرف في أول كلمة 🍋 لَيْمُون؟', o: ['ل', 'ن', 'س'], a: 'ل' },
+        { q: 'أيّ حرف في أول كلمة 🐊 تِمْسَاح؟', o: ['ت', 'خ', 'ل'], a: 'ت' },
+        { q: 'أيّ حرف في أول كلمة 🐑 خَرُوف؟', o: ['خ', 'س', 'ن'], a: 'خ' },
+      ],
+    },
+    {
+      t: 'قصص استماع الوحدات',
+      goal: 'أستمع إلى قصتين قصيرتين وأجيب عن أسئلتهما.',
+      steps: [
+        { h: 'قصة الوحدة الثانية: لعبتي', story: ['كان سامي يملك كرة صغيرة.', 'جاء صديقه ولم يكن عنده كرة.', 'قال سامي: «تعال نلعب معًا».', 'فرح الصديقان وقالا: «اللعب مع الأصدقاء أجمل».'], p: 'القصة من تأليف برافوتِن.' },
+        { h: 'قصة الوحدة الثالثة: الوردة العطشانة', story: ['رأت مريم وردة حمراء ذابلة في الحديقة.', 'أحضرت مريم كوب ماء وسقتها.', 'في اليوم التالي رفعت الوردة رأسها وابتسمت.', 'قالت مريم: «الماء يساعد الزهور على الحياة».'], p: 'القصة من تأليف برافوتِن.' },
+      ],
+      q: [
+        { q: 'ماذا قال سامي لصديقه؟', o: ['تعال نلعب معًا', 'اذهب'], a: 'تعال نلعب معًا' },
+        { q: 'ماذا فعلت مريم بالوردة؟', o: ['سقتها بالماء', 'قطفتها'], a: 'سقتها بالماء' },
+        { q: 'لماذا فرح الصديقان؟', o: ['لعبا معًا', 'ناما'], a: 'لعبا معًا' },
+      ],
+    },
+  ];
+
+  BT.courses['kg1-ar'] = { lang: 'ar', title: 'اللغة العربية — KG1', units: [u1, u2, u3] };
+})();
+
+/* KG1 English — first term. Order matches the curriculum map in kg1.html. */
+(function () {
+  const BT = window.BT, K = BT.kit;
+  const PH = [
+    { U: 'T', l: 't', words: [['🚂', 'train'], ['🧸', 'toys'], ['🐢', 'turtle']] },
+    { U: 'I', l: 'i', t: 'Phonics: Ii — in, insect, ink', words: [['📥', 'in'], ['🐛', 'insect'], ['✒️', 'ink']] },
+    { U: 'S', l: 's', words: [['⭐', 'star'], ['☀️', 'sun'], ['🏫', 'school']] },
+    { U: 'A', l: 'a', t: 'Phonics: Aa — apple, ant', words: [['🍎', 'apple'], ['🐜', 'ant'], ['🐊', 'alligator']] },
+    { U: 'N', l: 'n', words: [['🪺', 'nest'], ['🌙', 'night'], ['🔢', 'numbers']] },
+    { U: 'P', l: 'p', words: [['🖊️', 'pen'], ['👖', 'pants'], ['🍳', 'pan']] },
+    { U: 'H', l: 'h', words: [['❤️', 'heart'], ['🍯', 'honey'], ['🚁', 'helicopter']] },
+    { U: 'D', l: 'd', words: [['🐶', 'dog'], [null, 'desk'], ['👗', 'dress']] },
+    { U: 'R', l: 'r', words: [['🐰', 'rabbit'], ['🤖', 'robot'], ['🍚', 'rice']] },
+    { U: 'E', l: 'e', words: [['🥚', 'egg'], ['🦅', 'eagle'], ['🐘', 'elephant']] },
+    { U: 'C', l: 'c', words: [['🐄', 'cow'], ['☁️', 'cloud'], ['🧢', 'cap']] },
+    { U: 'K', l: 'k', words: [['🥝', 'kiwi'], ['⚽', 'kick'], ['🪁', 'kite']] },
+    { U: 'M', l: 'm', words: [['👩', 'mom'], ['👨', 'man'], ['🟤', 'mud']] },
+  ];
+  const ph = {};
+  PH.forEach((P, i) => (ph[P.U] = K.phonicsEn(P, i, PH)));
+  const P = (u) => ph[u];
+  const V = K.vocabEn, C = K.colorEn;
+
+  const numShape = (o) => ({
+    t: o.t,
+    goal: o.goal,
+    steps: [
+      { h: 'Numbers', big: o.big, sub: o.sub, p: o.pNum, say: o.say, items: o.count },
+      { h: 'Shapes', p: o.pShape, items: o.shapes },
+    ],
+    q: o.q,
+  });
+  const apples = (n) => '🍎'.repeat(n);
+
+  /* Unit 1 — Meet and Greet! */
+  const u1 = [
+    V({ t: 'Vocabulary: hello, good morning, goodbye', goal: 'I can greet people and say goodbye.', items: [['👋', 'hello'], ['🌞', 'good morning'], ['🤚', 'goodbye']], sentences: ['Hello! I am Sara.', 'Good morning, teacher!', 'Goodbye, friends!'], extraQ: [{ q: 'What do we say in the morning? 🌞', o: ['Good morning', 'Goodbye', 'Sorry'], a: 'Good morning' }] }),
+    V({ t: 'Vocabulary: boy, girl, friends', goal: 'I can name a boy, a girl and friends.', items: [['👦', 'boy'], ['👧', 'girl'], ['🧑‍🤝‍🧑', 'friends']], sentences: ['I am a boy.', 'I am a girl.', 'We are friends.'] }),
+    V({ t: 'Feelings: happy, sad', goal: 'I can say how I feel.', items: [['😊', 'happy'], ['😢', 'sad']], sentences: ['I am happy.', 'I am sad.', 'Are you happy?'], extraQ: [{ q: 'Which face is sad?', o: ['😢', '😊'], a: '😢' }] }),
+    P('T'),
+    P('I'),
+    numShape({ t: 'Math: number 1 and circle', goal: 'I can say number 1 and find a circle.', big: '1', sub: 'one', pNum: 'This is number 1. One sun. One nose. One head!', say: 'One. Number one.', count: [['☀️', 'one sun', '1'], ['👃', 'one nose', '1']], pShape: 'A circle is round like a ball. It has no corners.', shapes: [['⭕', 'circle'], ['⚽', 'ball', 'a circle shape'], ['🕐', 'clock', 'a circle shape']], q: [{ q: 'How many suns? ☀️', o: ['1', '2', '3'], a: '1' }, { q: 'Which is a circle?', o: ['⭕ circle', '🟦 square', '🔺 triangle'], a: '⭕ circle' }, { q: 'Which is number 1?', o: ['1', '2', '3'], a: '1' }] }),
+    C({ t: 'Color: red', name: 'red', ar: 'أحمر', items: [['🍎', 'apple'], ['❤️', 'heart'], ['🍓', 'strawberry']], project: 'Find three red things in your home or classroom and show them to a friend.' }),
+  ];
+
+  /* Unit 2 — I Can Find It at School! */
+  const u2 = [
+    V({ t: 'Vocabulary: classroom, teacher, chair, desk, board', goal: 'I can name things in my classroom.', items: [['🏫', 'classroom'], ['👩‍🏫', 'teacher'], ['🪑', 'chair'], [null, 'desk'], ['🟩', 'board']], sentences: ['This is my classroom.', 'She is my teacher.', 'I sit on a chair.'] }),
+    V({ t: 'Vocabulary: book, pencil, eraser, crayon', goal: 'I can name my school tools.', items: [['📖', 'book'], ['✏️', 'pencil'], [null, 'eraser'], ['🖍️', 'crayon']], sentences: ['I have a book.', 'I have a pencil.', 'I draw with a crayon.'] }),
+    V({ t: 'Vocabulary: playground, swing, slide', goal: 'I can name places and things to play with at school.', items: [['⚽', 'playground'], [null, 'swing'], ['🛝', 'slide']], sentences: ['I play in the playground.', 'I go on the slide.', 'I like the swing.'], extraQ: [{ q: 'Where do we play at school?', o: ['playground', 'classroom', 'kitchen'], a: 'playground' }] }),
+    P('S'),
+    P('A'),
+    P('N'),
+    numShape({ t: 'Math: number 2 and square', goal: 'I can say number 2 and find a square.', big: '2', sub: 'two', pNum: 'This is number 2. Two eyes. Two ears. Two hands!', say: 'Two. Number two.', count: [['👀', 'two eyes', '2'], ['👂', 'two ears', '2']], pShape: 'A square has four equal sides and four corners.', shapes: [['🟦', 'square'], ['🧊', 'box', 'a square shape'], ['🪟', 'window', 'a square shape']], q: [{ q: 'How many eyes? 👀', o: ['1', '2', '3'], a: '2' }, { q: 'Which is a square?', o: ['🟦 square', '⭕ circle', '🔺 triangle'], a: '🟦 square' }, { q: 'Which is number 2?', o: ['2', '1', '3'], a: '2' }] }),
+    C({ t: 'Color: blue · Project: school bag', name: 'blue', ar: 'أزرق', items: [['🌊', 'sea'], ['🫐', 'blueberries'], ['🦋', 'butterfly']], project: 'Project: decorate a paper school bag with blue and red.' }),
+  ];
+
+  /* Unit 3 — My Body, My Care! */
+  const u3 = [
+    V({ t: 'Vocabulary: hair, face, eyes, ears, nose, mouth', goal: 'I can name the parts of my face.', items: [['💇', 'hair'], ['🙂', 'face'], ['👀', 'eyes'], ['👂', 'ears'], ['👃', 'nose'], ['👄', 'mouth']], sentences: ['I have two eyes.', 'I smell with my nose.', 'I talk with my mouth.'] }),
+    V({ t: 'Vocabulary: teeth, arms, hands, legs, feet', goal: 'I can name more parts of my body.', items: [['🦷', 'teeth'], ['💪', 'arms'], ['🖐️', 'hands'], ['🦵', 'legs'], ['🦶', 'feet']], sentences: ['I brush my teeth.', 'I clap my hands.', 'I walk with my legs.'] }),
+    P('P'),
+    P('H'),
+    P('D'),
+    P('R'),
+    numShape({ t: 'Math: number 3 and star', goal: 'I can say number 3 and find a star.', big: '3', sub: 'three', pNum: 'This is number 3. Three apples. Three stars!', say: 'Three. Number three.', count: [['🍎🍎🍎', 'three apples', '3'], ['⭐⭐⭐', 'three stars', '3']], pShape: 'A star has five points. We see stars in the night sky.', shapes: [['⭐', 'star'], ['🌟', 'bright star'], ['🌠', 'shooting star']], q: [{ q: 'How many apples? 🍎🍎🍎', o: ['2', '3', '4'], a: '3' }, { q: 'Which is a star?', o: ['⭐ star', '⭕ circle', '🟦 square'], a: '⭐ star' }, { q: 'Which is number 3?', o: ['3', '1', '2'], a: '3' }] }),
+    C({ t: 'Color: yellow · Face parts project', name: 'yellow', ar: 'أصفر', items: [['🍌', 'banana'], ['🌻', 'sunflower'], ['🐥', 'chick']], project: 'Project: draw a face and name its parts: eyes, nose, mouth, ears.' }),
+  ];
+
+  /* Unit 4 — My Family Picnic! */
+  const u4 = [
+    V({ t: 'Vocabulary: grandfather, grandmother, father, mother', goal: 'I can name my family.', items: [['👴', 'grandfather'], ['👵', 'grandmother'], ['👨', 'father'], ['👩', 'mother']], sentences: ['This is my mother.', 'This is my father.', 'I love my grandmother.'] }),
+    V({ t: 'Vocabulary: sister, brother, garden, tree, flower, grass', goal: 'I can name my brother, sister and things in the garden.', items: [['👧', 'sister'], ['👦', 'brother'], [null, 'garden'], ['🌳', 'tree'], ['🌸', 'flower'], ['🌱', 'grass']], sentences: ['This is my sister.', 'I play in the garden.', 'I see a tree and a flower.'] }),
+    V({ t: 'Vocabulary: fruits, chocolate, chips, juice, sandwich', goal: 'I can name food at a picnic.', items: [['🍇', 'fruits'], ['🍫', 'chocolate'], ['🍟', 'chips'], ['🧃', 'juice'], ['🥪', 'sandwich']], sentences: ['I like juice.', 'I eat a sandwich.', 'We have fruits at the picnic.'] }),
+    P('E'),
+    P('C'),
+    P('K'),
+    P('M'),
+    numShape({ t: 'Math: numbers 4 and 5; heart and triangle', goal: 'I can say numbers 4 and 5 and find a heart and a triangle.', big: '4 5', sub: 'four · five', pNum: 'Four balloons. Five fingers on one hand!', say: 'Four. Five.', count: [['🎈🎈🎈🎈', 'four balloons', '4'], ['🖐️', 'five fingers', '5']], pShape: 'A heart shows love. A triangle has three corners.', shapes: [['❤️', 'heart'], ['🔺', 'triangle'], ['⛰️', 'mountain', 'a triangle shape']], q: [{ q: 'How many balloons? 🎈🎈🎈🎈', o: ['3', '4', '5'], a: '4' }, { q: 'How many fingers on one hand? 🖐️', o: ['4', '5', '6'], a: '5' }, { q: 'Which is a triangle?', o: ['🔺 triangle', '❤️ heart', '⭕ circle'], a: '🔺 triangle' }, { q: 'Which is a heart?', o: ['❤️ heart', '🔺 triangle'], a: '❤️ heart' }] }),
+    C({ t: 'Colors: green and orange · Family tree project', name: 'green', ar: 'أخضر · برتقالي', items: [['🐸', 'frog', 'green'], ['🥒', 'cucumber', 'green'], ['🍊', 'orange', 'orange']], project: 'Project: make a family tree. Draw a tree and put a picture of each family member on it.' }),
+  ];
+
+  BT.courses['kg1-en'] = { lang: 'en', title: 'English — KG1', units: [u1, u2, u3, u4] };
+})();
+
+/* BravoTen lesson player: illustrated explanation -> interactive steps -> game questions -> reward */
+(function () {
+  'use strict';
+  const BT = window.BT || { courses: {} };
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const qs = new URLSearchParams(location.search);
+  const cid = qs.get('c') || 'kg1-ar';
+  const ui = Math.max(0, parseInt(qs.get('u') || '0', 10) || 0);
+  const li = Math.max(0, parseInt(qs.get('l') || '0', 10) || 0);
+  const course = BT.courses[cid];
+  const lesson = course && course.units[ui] && course.units[ui][li];
+  const app = $('app');
+
+  if (!lesson) {
+    app.innerHTML = '<div class="err card"><div style="font-size:4rem">🧭</div><h2>الدرس غير موجود / Lesson not found</h2><p><a class="btn" href="kg1.html">← kg1</a></p></div>';
+    return;
+  }
+
+  const ar = course.lang === 'ar';
+  document.documentElement.lang = ar ? 'ar' : 'en';
+  document.documentElement.dir = ar ? 'rtl' : 'ltr';
+  document.title = lesson.t + ' — BravoTen';
+  $('backLink').href = 'kg1.html?c=' + encodeURIComponent(cid) + '&u=' + ui;
+  if (!ar) app.classList.add('ltr');
+
+  const T = ar
+    ? {
+        back: '← الدروس', crumb: (u, l) => 'KG1 · الوحدة ' + (u + 1) + ' · درس ' + (l + 1),
+        next: 'التالي ←', prev: '→ السابق', start: 'يلا نلعب! 🎮', tap: 'اضغط على الصور لتسمعها 👆', reveal: 'اضغط لتظهر الجملة التالية 👆',
+        listen: '🔊 اسمع الشرح', q: (i, n) => 'سؤال ' + (i + 1) + ' من ' + n, again: ['جرّب تاني، أنت تقدر! 💪', 'قريب جدًا! حاول مرة أخرى 🌈', 'لا بأس، فكّر وجرّب ✨'],
+        good: ['أحسنت! 🎉', 'برافو عليك! 🌟', 'ممتاز! 👏', 'شاطر جدًا! 💛', 'رائع! 🚀'],
+        win: ['مبروك يا بطل!', 'أحسنت جدًا!', 'شاطر! كمّل!'], got: 'حصلت على ملصق جديد!', replay: 'العب تاني 🔄', nextLesson: 'الدرس التالي ←', toList: 'قائمة الدروس',
+        hello: 'يلا نتعلّم! اضغط واستمتع', stars: 'نجوم', sticker: 'ملصق', allDone: 'خلّصت كل الدروس! 🏆',
+      }
+    : {
+        back: '← Lessons', crumb: (u, l) => 'KG1 English · Unit ' + (u + 1) + ' · Lesson ' + (l + 1),
+        next: 'Next →', prev: '← Back', start: 'Let’s play! 🎮', tap: 'Tap the pictures to listen 👆', reveal: 'Tap to show the next line 👆',
+        listen: '🔊 Listen', q: (i, n) => 'Question ' + (i + 1) + ' of ' + n, again: ['Try again, you can do it! 💪', 'So close! Try once more 🌈', 'That’s OK, think and try ✨'],
+        good: ['Great job! 🎉', 'Bravo! 🌟', 'Super! 👏', 'Well done! 💛', 'Awesome! 🚀'],
+        win: ['Congratulations, champion!', 'Great work!', 'You did it!'], got: 'New sticker!', replay: 'Play again 🔄', nextLesson: 'Next lesson →', toList: 'All lessons',
+        hello: 'Let’s learn!', stars: 'stars', sticker: 'sticker', allDone: 'You finished every lesson! 🏆',
+      };
+  $('backLink').textContent = T.back;
+
+  /* ---------- storage ---------- */
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } },
+  };
+  const lid = cid + ':' + ui + ':' + li;
+  const totalStars = () => Object.values(store.get('bt.progress', {})).reduce((a, b) => a + (b.stars || 0), 0);
+  const refreshHud = () => { $('totalStars').textContent = totalStars(); };
+  refreshHud();
+
+  /* ---------- sound & voice ---------- */
+  let muted = store.get('bt.mute', false);
+  const muteBtn = $('muteBtn');
+  const paintMute = () => { muteBtn.textContent = muted ? '🔇' : '🔊'; muteBtn.setAttribute('aria-pressed', String(muted)); };
+  paintMute();
+  muteBtn.addEventListener('click', () => { muted = !muted; store.set('bt.mute', muted); paintMute(); if (muted && window.speechSynthesis) speechSynthesis.cancel(); });
+  let ac;
+  function tone(seq) {
+    if (muted) return;
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      let t = ac.currentTime;
+      seq.forEach(([f, d]) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.type = 'triangle'; o.frequency.value = f; o.connect(g); g.connect(ac.destination);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        o.start(t); o.stop(t + d + 0.02); t += d * 0.85;
+      });
+    } catch (e) { /* audio not available */ }
+  }
+  const sOk = () => tone([[660, 0.12], [880, 0.12], [1175, 0.2]]);
+  const sNo = () => tone([[300, 0.16], [240, 0.22]]);
+  const sPop = () => tone([[520, 0.08]]);
+  const sWin = () => tone([[523, 0.14], [659, 0.14], [784, 0.14], [1047, 0.34]]);
+  /* ---- voice: system TTS first, online audio as a fallback ---- */
+  let voices = [];
+  function loadVoices() { try { voices = (window.speechSynthesis && speechSynthesis.getVoices()) || []; } catch (e) { voices = []; } }
+  loadVoices();
+  try { if (window.speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices; } catch (e) { /* ignore */ }
+  function findVoice() {
+    const want = ar ? 'ar' : 'en';
+    const pref = ar ? ['ar-eg', 'ar-sa', 'ar'] : ['en-us', 'en-gb', 'en'];
+    const cand = voices.filter((v) => (v.lang || '').toLowerCase().replace('_', '-').indexOf(want) === 0);
+    for (const p of pref) { const v = cand.find((x) => x.lang.toLowerCase().replace('_', '-').indexOf(p) === 0); if (v) return v; }
+    return cand[0] || null;
+  }
+  let toastTimer;
+  function toast(msg) {
+    let t = $('toast');
+    if (!t) { t = document.createElement('div'); t.id = 'toast'; t.setAttribute('role', 'status'); t.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92%;background:#192744;color:#fff;padding:12px 18px;border-radius:16px;z-index:200;font-weight:bold;text-align:center;box-shadow:0 8px 24px #0004'; document.body.appendChild(t); }
+    t.textContent = msg; t.style.display = 'block'; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4500);
+  }
+  let player = null, playSeq = 0;
+  function chunks(text) {
+    const parts = text.split(/(?<=[.!?؟،,؛:])\s+/), out = []; let cur = '';
+    parts.forEach((p) => { if ((cur + ' ' + p).length > 150 && cur) { out.push(cur); cur = p; } else cur = (cur ? cur + ' ' : '') + p; });
+    if (cur) out.push(cur); return out.map((x) => x.slice(0, 190));
+  }
+  function playOnline(text) {
+    const id = ++playSeq, list = chunks(text); let i = 0, failed = false;
+    if (player) { try { player.pause(); } catch (e) { /* ignore */ } }
+    const next = () => {
+      if (id !== playSeq || i >= list.length) return;
+      const a = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + (ar ? 'ar' : 'en') + '&q=' + encodeURIComponent(list[i++]));
+      player = a; a.onended = next;
+      a.onerror = () => { if (!failed) { failed = true; toast(ar ? 'تعذّر تشغيل الصوت. تأكد من الإنترنت ومن رفع صوت الجهاز 🔊' : 'Sound could not play. Check the internet and your volume 🔊'); } };
+      const pr = a.play(); if (pr && pr.catch) pr.catch(() => a.onerror());
+    };
+    next();
+  }
+  function speak(text) {
+    if (muted || !text) return;
+    const clean = String(text).replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
+    if (!clean) return;
+    playSeq++; if (player) { try { player.pause(); } catch (e) { /* ignore */ } }
+    if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') { playOnline(clean); return; }
+    let started = false, fell = false;
+    const fallback = () => { if (fell || started) return; fell = true; try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } playOnline(clean); };
+    try {
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      loadVoices();
+      const u = new SpeechSynthesisUtterance(clean), v = findVoice();
+      if (!v && voices.length > 0) { playOnline(clean); return; }
+      if (v) { u.voice = v; u.lang = v.lang; } else u.lang = ar ? 'ar-EG' : 'en-US';
+      u.rate = ar ? 0.8 : 0.85; u.pitch = 1.1; u.volume = 1;
+      u.onstart = () => { started = true; };
+      u.onerror = fallback;
+      if (speechSynthesis.paused) speechSynthesis.resume();
+      speechSynthesis.speak(u);
+      setTimeout(fallback, 1400);
+    } catch (e) { fallback(); }
+  }
+
+  /* ---------- effects ---------- */
+  const calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function confetti(n) {
+    if (calm) return;
+    const bits = ['🎉', '⭐', '✨', '🎈', '💛', '🌈', '🎊'];
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('span');
+      s.className = 'confetti'; s.textContent = bits[Math.floor(Math.random() * bits.length)];
+      s.style.left = Math.random() * 100 + 'vw'; s.style.animationDuration = 2.2 + Math.random() * 2.2 + 's'; s.style.animationDelay = Math.random() * 0.6 + 's';
+      s.style.fontSize = 1.1 + Math.random() * 1.4 + 'rem';
+      document.body.appendChild(s); setTimeout(() => s.remove(), 5500);
+    }
+  }
+  function sparkle(el) {
+    if (calm || !el) return;
+    const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (let i = 0; i < 7; i++) {
+      const s = document.createElement('span');
+      s.className = 'spark'; s.textContent = ['✨', '⭐', '💫'][i % 3];
+      s.style.left = cx + 'px'; s.style.top = cy + 'px';
+      const a = (Math.PI * 2 * i) / 7;
+      s.style.setProperty('--dx', Math.cos(a) * 70 + 'px'); s.style.setProperty('--dy', Math.sin(a) * 70 + 'px');
+      document.body.appendChild(s); setTimeout(() => s.remove(), 900);
+    }
+  }
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+
+  /* ---------- header / frame ---------- */
+  function frame(inner) {
+    return '<div class="crumb">' + esc(T.crumb(ui, li)) + '</div><h1>' + esc(lesson.t) + '</h1><p class="goal">' + esc(lesson.goal || '') + '</p>' + inner;
+  }
+
+  /* ---------- LEARN phase ---------- */
+  let step = 0;
+  const seen = lesson.steps.map(() => ({}));
+  const nSteps = lesson.steps.length;
+
+  function dots() {
+    let h = '<div class="dots" aria-hidden="true">';
+    for (let i = 0; i < nSteps; i++) h += '<span class="dot ' + (i < step ? 'done' : i === step ? 'on' : '') + '"></span>';
+    return h + '</div>';
+  }
+  const sayOf = (s) => s.say || [s.h, s.p].concat((s.list || []).map((x) => x[1])).concat(s.story || []).filter(Boolean).join('. ');
+
+  function renderStep() {
+    const s = lesson.steps[step];
+    let body = '';
+    body += '<div class="mascot-row"><div class="mascot" aria-hidden="true">🧸</div><div class="bubble"><h2>' + esc(s.h) + '</h2>' + (s.p ? '<p>' + esc(s.p) + '</p>' : '') + '<button class="say" id="sayStep">' + T.listen + '</button></div></div>';
+    if (s.big) body += '<div class="bigbox"><button class="big" id="bigBtn" aria-label="' + esc(s.sub || s.big) + '">' + esc(s.big) + '</button>' + (s.sub ? '<div class="sub">' + esc(s.sub) + '</div>' : '') + '</div>';
+    if (s.forms) body += '<div class="forms">' + s.forms.map((f) => '<div class="form"><b>' + esc(f[1]) + '</b><small>' + esc(f[0]) + '</small></div>').join('') + '</div>';
+    if (s.items) {
+      body += '<div class="hint"><span>' + T.tap + '</span><span class="meter"><span id="meter"></span></span></div><div class="items">';
+      s.items.forEach((it, j) => {
+        const multi = (it[0] || '').length > 5 ? ' multi' : '';
+        body += '<button class="item" data-j="' + j + '" data-say="' + esc(it[1]) + '"><span class="seen">✓</span><span class="pic' + multi + '">' + esc(it[0]) + '</span><span class="word">' + esc(it[1]) + '</span>' + (it[2] ? '<small class="tag">' + esc(it[2]) + '</small>' : '') + '</button>';
+      });
+      body += '</div>';
+    }
+    if (s.list) body += '<ul class="list">' + s.list.map((x, k) => '<li data-say="' + esc(x[1]) + '" style="animation-delay:' + k * 0.18 + 's"><span class="e">' + esc(x[0]) + '</span><span>' + esc(x[1]) + '</span></li>').join('') + '</ul>';
+    if (s.story) {
+      body += '<div class="story">' + s.story.map((x, k) => '<div class="line' + (k === 0 ? ' show' : '') + '" data-say="' + esc(x) + '">' + esc(x) + '</div>').join('') + '</div>';
+      if (s.story.length > 1) body += '<button class="reveal" id="revealBtn">' + T.reveal + '</button>';
+    }
+    if (s.tip) body += '<div class="tip">💡 ' + esc(s.tip) + '</div>';
+    const last = step === nSteps - 1;
+    const nav = '<div class="nav"><button class="btn light" id="prevBtn"' + (step === 0 ? ' disabled' : '') + '>' + T.prev + '</button><button class="btn' + (last ? ' go' : '') + '" id="nextBtn">' + (last ? T.start : T.next) + '</button></div>';
+    app.innerHTML = frame(dots() + '<article class="card enter" id="stepCard">' + body + '</article>' + nav);
+    bindStep(s);
+  }
+
+  function bindStep(s) {
+    $('sayStep').addEventListener('click', () => { sPop(); speak(sayOf(s)); });
+    const big = $('bigBtn');
+    if (big) big.addEventListener('click', () => { sparkle(big); sPop(); speak(s.say || s.sub || s.big); });
+    const total = (s.items || []).length;
+    const mark = () => {
+      const c = Object.keys(seen[step]).length;
+      const m = $('meter'); if (m) m.style.width = (total ? (c / total) * 100 : 0) + '%';
+      if (total && c === total) $('nextBtn').classList.add('glow');
+    };
+    document.querySelectorAll('.item').forEach((b) => {
+      const j = b.dataset.j;
+      if (seen[step][j]) b.classList.add('seen-on');
+      b.addEventListener('click', () => {
+        b.classList.remove('hit'); void b.offsetWidth; b.classList.add('hit');
+        const first = !seen[step][j];
+        seen[step][j] = 1; b.classList.add('seen-on'); sparkle(b); sPop(); speak(b.dataset.say);
+        mark();
+        if (first && Object.keys(seen[step]).length === total) setTimeout(sOk, 350);
+      });
+    });
+    mark();
+    document.querySelectorAll('.list li, .line').forEach((el) => el.addEventListener('click', () => { sPop(); speak(el.dataset.say); }));
+    const rb = $('revealBtn');
+    if (rb) {
+      const lines = document.querySelectorAll('.line');
+      speak(lines[0].dataset.say);
+      rb.addEventListener('click', () => {
+        const hidden = Array.from(lines).find((l) => !l.classList.contains('show'));
+        if (hidden) { hidden.classList.add('show'); sPop(); speak(hidden.dataset.say); hidden.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        if (!Array.from(lines).some((l) => !l.classList.contains('show'))) { rb.remove(); $('nextBtn').classList.add('glow'); }
+      });
+    }
+    $('prevBtn').addEventListener('click', () => { if (step > 0) { step--; renderStep(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+    $('nextBtn').addEventListener('click', () => {
+      sPop();
+      if (step < nSteps - 1) { step++; renderStep(); window.scrollTo({ top: 0, behavior: 'smooth' }); } else startGame();
+    });
+  }
+
+  /* ---------- GAME phase ---------- */
+  let qi = 0, firstTry = 0, mistakes = 0, qWrong = false, locked = false;
+  const questions = lesson.q;
+
+  function startGame() { qi = 0; firstTry = 0; mistakes = 0; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+  function renderQuestion() {
+    const q = questions[qi];
+    qWrong = false; locked = false;
+    const opts = shuffle(q.o);
+    const pos = (qi / questions.length);
+    let h = '<div class="track" aria-hidden="true"><div class="rail"></div><div class="rocket" id="rocket" style="inset-inline-start:calc(8px + (100% - 64px) * ' + pos + ')">🚀</div><div class="flag">🏆</div></div>';
+    h += '<div class="qno"><span>' + T.q(qi, questions.length) + '</span><span class="stars-line" aria-label="stars">' + '⭐'.repeat(firstTry) + '</span></div>';
+    h += '<article class="card enter"><div class="mascot-row"><div class="mascot" aria-hidden="true">🧸</div><div class="bubble"><div class="qtext">' + esc(q.q) + '</div><button class="say" id="sayQ">' + T.listen.replace(ar ? 'الشرح' : '', '') + '</button></div></div>';
+    h += '<div class="opts">' + opts.map((o) => '<button class="opt" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('') + '</div><div class="fb" id="fb" aria-live="polite"></div></article>';
+    app.innerHTML = frame(h);
+    $('sayQ').addEventListener('click', () => { sPop(); speak(q.q); });
+    document.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => answer(b, q)));
+  }
+
+  function answer(b, q) {
+    if (locked) return;
+    const ok = b.dataset.v === q.a;
+    const fb = $('fb');
+    if (ok) {
+      locked = true;
+      b.classList.add('right');
+      document.querySelectorAll('.opt').forEach((x) => { if (x !== b) x.classList.add('dim'); });
+      if (!qWrong) firstTry++;
+      fb.textContent = pick(T.good); fb.className = 'fb good';
+      sOk(); sparkle(b); confetti(14);
+      const r = $('rocket'); if (r) r.style.insetInlineStart = 'calc(8px + (100% - 64px) * ' + (qi + 1) / questions.length + ')';
+      setTimeout(() => {
+        qi++;
+        if (qi < questions.length) renderQuestion(); else finish();
+      }, 1400);
+    } else {
+      qWrong = true; mistakes++;
+      b.classList.add('wrong'); b.disabled = true;
+      fb.textContent = pick(T.again); fb.className = 'fb bad'; sNo();
+    }
+  }
+
+  /* ---------- REWARD phase ---------- */
+  function stickerFor() {
+    for (const s of lesson.steps) for (const it of s.items || []) if (it[0] && it[0].length <= 5 && it[0] !== '💬') return [it[0], it[1]];
+    return ['🌟', lesson.t];
+  }
+  function nextLessonUrl() {
+    let u = ui, l = li + 1;
+    if (l >= course.units[u].length) { u++; l = 0; }
+    if (u >= course.units.length) return null;
+    return 'lesson.html?c=' + encodeURIComponent(cid) + '&u=' + u + '&l=' + l;
+  }
+  function finish() {
+    const ratio = firstTry / questions.length;
+    const stars = ratio >= 0.99 ? 3 : ratio >= 0.5 ? 2 : 1;
+    const prog = store.get('bt.progress', {});
+    const prev = prog[lid] ? prog[lid].stars || 0 : 0;
+    prog[lid] = { stars: Math.max(prev, stars), at: Date.now() };
+    store.set('bt.progress', prog);
+    const st = stickerFor();
+    const album = store.get('bt.stickers', []);
+    const isNew = !album.some((x) => x.id === lid);
+    if (isNew) { album.push({ id: lid, e: st[0], n: st[1] }); store.set('bt.stickers', album); }
+    refreshHud();
+    const nu = nextLessonUrl();
+    let h = '<article class="card reward enter"><div class="trophy" aria-hidden="true">🏆</div><h2 style="margin:4px 0">' + esc(pick(T.win)) + '</h2>';
+    h += '<div class="stars" id="rs" aria-label="' + stars + ' ' + T.stars + '"><span>⭐</span><span>⭐</span><span>⭐</span></div>';
+    h += '<div class="sticker" aria-live="polite"><span class="em">' + esc(st[0]) + '</span><div><small>' + (isNew ? T.got : T.sticker) + '</small><b style="font-size:1.2rem">' + esc(st[1]) + '</b></div></div>';
+    h += '<div class="actions"><button class="btn go" id="again">' + T.replay + '</button>' + (nu ? '<a class="btn" href="' + nu + '">' + T.nextLesson + '</a>' : '<div class="chip">' + T.allDone + '</div>') + '<a class="btn light" href="' + esc($('backLink').href) + '">' + T.toList + '</a></div></article>';
+    app.innerHTML = frame(h);
+    document.querySelectorAll('#rs span').forEach((s, i) => { if (i < stars) setTimeout(() => { s.classList.add('on'); sOk(); }, 500 + i * 450); });
+    setTimeout(() => { sWin(); confetti(46); }, 300);
+    $('again').addEventListener('click', () => { step = 0; renderStep(); window.scrollTo({ top: 0 }); });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  renderStep();
+})();
+
+</script>
+</body>
+</html>
